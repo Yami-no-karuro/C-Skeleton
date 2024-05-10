@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 [build|run] [debug|release]"
+    exit 1
+fi
+
+command="$1"
+target="$2"
+
+if [ "$command" = "build" ]; then
+    if [ "$target" = "debug" ]; then
+        mkdir -p "./target/debug"
+        gcc -o "./target/debug/main" -g "./src/main.c"
+    elif [ "$target" = "release" ]; then
+        mkdir -p "./target/release"
+        gcc -o "./target/release/main" "./src/main.c"
+    else
+        echo "Error."
+        echo "Invalid build target."
+        exit 1
+    fi
+elif [ "$command" = "run" ]; then
+    if [ ! -f "./target/$target/main" ]; then
+        echo "Error."
+        echo "Binary not found."
+        exit 1
+    fi
+    "./target/$target/main"
+else
+    echo "Error."
+    echo "Command not found."
+    exit 1
+fi
+
+exit 0
