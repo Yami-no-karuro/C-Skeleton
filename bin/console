@@ -12,9 +12,11 @@ if [ "$command" = "build" ]; then
     if [ "$target" = "debug" ]; then
         mkdir -p "./target/debug"
         gcc -o "./target/debug/main" -g "./src/main.c"
+        echo "Build (debug) executed successfully."
     elif [ "$target" = "release" ]; then
         mkdir -p "./target/release"
         gcc -o "./target/release/main" "./src/main.c"
+        echo "Build (release) executed successfully."
     else
         echo "Error."
         echo "Invalid build target."
@@ -26,6 +28,7 @@ elif [ "$command" = "run" ]; then
         echo "Binary not found."
         exit 1
     fi
+    echo "Executing..."
     "./target/$target/main"
 else
     echo "Error."
