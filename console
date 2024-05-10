@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 [build|run] [debug|release]"
+    exit 1
+fi
+
+command="$1"
+mod="$2"
+
+if [ "$mod" = "debug" ]; then
+    path="./target/debug"
+elif [ "$mod" = "release" ]; then
+    path="./target/release"
+else
+    echo "Invalid mode: $mod"
+    echo "Please specify debug or release."
+    exit 1
+fi
+
+if [ "$command" = "build" ]; then
+    mkdir -p $path
+    gcc -o "$path/main" "./src/main.c"
+elif [ "$command" = "run" ]; then
+    if [ ! -f "$path/main" ]; then
+        echo "Binary not found. Please build first."
+        exit 1
+    fi
+    "$path/main"
+else
+    echo "Invalid command: $command"
+    echo "Please specify build or run."
+    exit 1
+fi
+
+exit 0
