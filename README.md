@@ -3,8 +3,12 @@
 ## Setup
 
 - Run `` cd <project_dir> ``
-- Run `` chmod +x ./bin/requirements ``
 - Run `` chmod +x ./bin/console ``
+
+## Requirements
+
+- Run `` cd <project_dir> ``
+- Run `` bin/console requirements ``
 
 ## Build
 
@@ -14,4 +18,4 @@
 ## Run
 
 - Run `` cd <project_dir> ``
-- Run `` bin/console run (debug|release) ``
+- Run `` bin/console run ``

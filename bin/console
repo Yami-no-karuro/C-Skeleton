@@ -1,39 +1,47 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 [build|run] [debug|release]"
-    exit 1
-fi
-
-command="$1"
-target="$2"
-
-if [ "$command" = "build" ]; then
-    if [ "$target" = "debug" ]; then
+if [ "$1" = "build" ]; then
+    if [ "$2" = "debug" ]; then
         mkdir -p "./target/debug"
         gcc -o "./target/debug/main" -g "./src/main.c"
+
         echo "Build (debug) executed successfully."
-    elif [ "$target" = "release" ]; then
+        exit 0
+    elif [ "$2" = "release" ]; then
         mkdir -p "./target/release"
         gcc -o "./target/release/main" "./src/main.c"
+
         echo "Build (release) executed successfully."
+        exit 0
     else
         echo "Error."
-        echo "Invalid build target."
+        echo "Invalid or missing build target."
         exit 1
     fi
-elif [ "$command" = "run" ]; then
-    if [ ! -f "./target/$target/main" ]; then
+fi
+
+if [ "$1" = "run" ]; then
+    if [ ! -f "./target/debug/main" ]; then
         echo "Error."
         echo "Binary not found."
         exit 1
     fi
-    echo "Executing..."
-    "./target/$target/main"
-else
-    echo "Error."
-    echo "Command not found."
-    exit 1
+
+    "./target/debug/main"
+    exit 0
 fi
 
-exit 0
+if [ "$1" = "requirements" ]; then
+    if ! command -v gcc &> /dev/null; then
+        echo -e " - GCC \xE2\x9C\x97"
+    else
+        echo -e " - GCC \xE2\x9C\x93"
+    fi
+
+    echo "Requirements check executed successfully."
+    exit 0
+fi
+
+echo "Error."
+echo "Command not found."
+exit 1
