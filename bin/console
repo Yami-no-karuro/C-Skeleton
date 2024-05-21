@@ -1,19 +1,24 @@
 #!/bin/bash
 
-if [ "$1" = "build" ]; then
-    if [[ "$2" = "debug" || "$2" = "release" ]]; then
-        mkdir -p "./target/$2"
-        gcc -o "./target/$2/main" "./src/main.c"
-        echo "Build ($2) finished executing."
+# Usage: "bin/console build (debug|release)"
+# Description: Compiles "main.c" in "/target/(debug|release)/main"
+build() {
+    local target="$1"
+    if [[ "$target" = "debug" || "$target" = "release" ]]; then
+        mkdir -p "./target/$target"
+        gcc -o "./target/$target/main" "./src/main.c"
+        echo "Build ($target) finished executing."
         exit 0
     else
         echo "Error."
         echo "Invalid or missing build target."
         exit 1
     fi
-fi
+}
 
-if [ "$1" = "run" ]; then
+# Usage: "bin/console run"
+# Description: Runs the last compiled "main.c" executable from "/target/(debug|release)/main"
+run() {
     if [ ! -f "./target/debug/main" ]; then
         echo "Error."
         echo "Binary not found."
@@ -21,9 +26,11 @@ if [ "$1" = "run" ]; then
     fi
     "./target/debug/main"
     exit 0
-fi
+}
 
-if [ "$1" = "check-requirements" ]; then
+# Usage: "bin/console check-requirements"
+# Description: Executes the system requirements check
+requirements_check() {
     if ! command -v gcc &> /dev/null; then
         echo -e " - GCC \xE2\x9C\x97"
     else
@@ -31,6 +38,14 @@ if [ "$1" = "check-requirements" ]; then
     fi
     echo "Requirements check finished executing."
     exit 0
+}
+
+if [ "$1" = "build" ]; then
+    build "$2"
+elif [ "$1" = "run" ]; then
+    run
+elif [ "$1" = "check-requirements" ]; then
+    requirements_check
 fi
 
 echo "Error."
