@@ -1,9 +1,11 @@
 # C - Skeleton
+## Starter template for C applications
 
-## Setup
+### Setup
 
-- Run `` cd <project_dir> ``
-- Run `` rm -rf .git `` to remove any existing repository
-- Run `` git init `` to initialize a fresh repository in the current directory
-- Run `` chmod +x ./bin/console `` to make the `console` utility file executable from the command line
-- Run `` bin/console check-requirements `` to ensure that your system meets the requirements
+- Clone the repository, `` git clone https://github.com/Yami-no-karuro/C-Skeleton.git ``
+- Change directory inside the skeleton project, `` cd C-Skeleton ``
+- Remove the existing repository, `` rm -rf .git ``
+- Make the console utility file executable, `` chmod +x ./bin/console ``
+- Run the requirements check, `` bin/console check-requirements ``
+- Enjoy!
