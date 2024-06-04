@@ -30,7 +30,8 @@ run() {
         echo "Binary not found."
         exit 1
     fi
-    ./target/debug/main
+    shift
+    ./target/debug/main "$@"
 }
 
 # Usage: "bin/console check-requirements"
@@ -44,11 +45,24 @@ requirements_check() {
     echo "Requirements check finished executing."
 }
 
+# ====
+# Main
+# ====
+
+while true; do
+  read -p "Execute command \"$1\" as \"$(id -u):$(id -g)\"? (y/n): " yn
+    case $yn in
+      [Yy]* ) echo "Executing..."; break;;
+      [Nn]* ) echo "Aborting."; echo "Manually stopped."; exit 0;;
+      * ) echo "Invalid answer, please use \"y\" or \"n\".";;
+    esac
+done
+
 if [ "$1" = "build" ]; then
     build "$2"
     exit 0
 elif [ "$1" = "run" ]; then
-    run
+    run "$@"
     exit 0
 elif [ "$1" = "check-requirements" ]; then
     requirements_check
