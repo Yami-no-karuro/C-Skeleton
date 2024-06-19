@@ -1,19 +1,23 @@
 #!/bin/bash
 
-# Usage: "bin/console build (debug|release)"
-# Description: Compiles "main.c" in "/target/(debug|release)/main"
+# Usage: "bin/console build <debug|release> <source>"
+# Description: Compiles the provided source
 build() {
     local TARGET="$1"
+    local SOURCE="$2"
     if [[ "$TARGET" = "debug" || "$TARGET" = "release" ]]; then
         mkdir -p "./target/$TARGET"
         if [[ "$TARGET" = "release" ]]; then
-            UNIQUE_ID=$(date +%s)
-            OUTPUT_FILE="./target/$TARGET/$UNIQUE_ID-main"
+            UNIQID=$(date +%s)
+            OUTPUT="./target/$TARGET/$UNIQID-$SOURCE"
         else
-            OUTPUT_FILE="./target/$TARGET/main"
+            OUTPUT="./target/$TARGET/$SOURCE"
         fi
-        gcc -o "$OUTPUT_FILE" "./src/main.c"
-        echo "Build ($TARGET) finished executing."
+        gcc -o "$OUTPUT" "./src/$SOURCE.c"
+        if [ $? -ne 0 ]; then
+            exit 1
+        fi
+        echo "Build $SOURCE ($TARGET) finished executing."
     else
         echo "Error."
         echo "Invalid or missing build target."
@@ -21,17 +25,19 @@ build() {
     fi
 }
 
-# Usage: "bin/console run"
-# Description: Compiles and run the "main" executable from "/target/debug/main"
+# Usage: "bin/console run <source>"
+# Description: Compiles and run the provided source
 run() {
-    build debug
-    if [ ! -f "./target/debug/main" ]; then
+    local SOURCE="$2"
+    build debug "$SOURCE"
+    if [ ! -f "./target/debug/$SOURCE" ]; then
         echo "Error."
         echo "Binary not found."
         exit 1
     fi
     shift
-    ./target/debug/main "$@"
+    shift
+    "./target/debug/$SOURCE" "$@"
 }
 
 # Usage: "bin/console check-requirements"
@@ -59,7 +65,7 @@ while true; do
 done
 
 if [ "$1" = "build" ]; then
-    build "$2"
+    build "$2" "$3"
     exit 0
 elif [ "$1" = "run" ]; then
     run "$@"
