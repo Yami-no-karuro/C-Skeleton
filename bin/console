@@ -38,6 +38,9 @@ run() {
     shift
     shift
     "./target/debug/$SOURCE" "$@"
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
 }
 
 # Usage: "bin/console check-requirements"
