@@ -14,5 +14,5 @@
 ### Commands
 
 - `` bin/console check-requirements ``
-- `` bin/console build (debug|release) ``
-- `` bin/console run ``
+- `` bin/console build <debug|release> <source> ``
+- `` bin/console run <source> ``
