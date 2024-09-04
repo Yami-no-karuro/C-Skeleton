@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage: "bin/console build <debug|release> <source>"
-# Description: Compiles the provided source
+# Description: Compiles the provided source along with all files in lib
 build() {
     local TARGET="$1"
     local SOURCE="$2"
@@ -13,7 +13,10 @@ build() {
         else
             OUTPUT="./target/$TARGET/$SOURCE"
         fi
-        gcc -o "$OUTPUT" "./src/$SOURCE.c"
+
+        SRC_FILES=$(find src -type f -name '*.c')
+        gcc -o "$OUTPUT" $SRC_FILES -Isrc/lib
+
         if [ $? -ne 0 ]; then
             exit 1
         fi
@@ -26,7 +29,7 @@ build() {
 }
 
 # Usage: "bin/console run <source>"
-# Description: Compiles and run the provided source
+# Description: Compiles and runs the provided source
 run() {
     local SOURCE="$2"
     build debug "$SOURCE"
@@ -35,6 +38,7 @@ run() {
         echo "Binary not found."
         exit 1
     fi
+
     shift
     shift
     "./target/debug/$SOURCE" "$@"
