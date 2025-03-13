@@ -1,12 +1,18 @@
 #!/bin/bash
 
+# ====
 # Usage: "bin/console build <debug|release> <source>"
 # Description: Compiles the provided source along with all files in lib
-build() {
+# ====
+
+build()
+{
     local TARGET="$1"
     local SOURCE="$2"
+
     if [[ "$TARGET" = "debug" || "$TARGET" = "release" ]]; then
         mkdir -p "./target/$TARGET"
+
         if [[ "$TARGET" = "release" ]]; then
             UNIQID=$(date +%s)
             OUTPUT="./target/$TARGET/$UNIQID-$SOURCE"
@@ -20,6 +26,7 @@ build() {
         if [ $? -ne 0 ]; then
             exit 1
         fi
+
         echo "Build $SOURCE ($TARGET) finished executing."
     else
         echo "Error."
@@ -28,10 +35,15 @@ build() {
     fi
 }
 
+# ====
 # Usage: "bin/console run <source>"
 # Description: Compiles and runs the provided source
-run() {
+# ====
+
+run()
+{
     local SOURCE="$2"
+
     build debug "$SOURCE"
     if [ ! -f "./target/debug/$SOURCE" ]; then
         echo "Error."
@@ -41,35 +53,32 @@ run() {
 
     shift
     shift
+
     "./target/debug/$SOURCE" "$@"
     if [ $? -ne 0 ]; then
         exit 1
     fi
 }
 
+# ====
 # Usage: "bin/console check-requirements"
 # Description: Executes the system requirements check
-requirements_check() {
+# ====
+
+requirements_check()
+{
     if ! command -v gcc &> /dev/null; then
         echo -e " - GCC \xE2\x9C\x97"
     else
         echo -e " - GCC \xE2\x9C\x93"
     fi
+
     echo "Requirements check finished executing."
 }
 
 # ====
 # Main
 # ====
-
-while true; do
-  read -p "Execute command \"$1\" as \"$(id -u):$(id -g)\"? (y/n): " yn
-    case $yn in
-      [Yy]* ) echo "Executing..."; break;;
-      [Nn]* ) echo "Aborting."; echo "Manually stopped."; exit 0;;
-      * ) echo "Invalid answer, please use \"y\" or \"n\".";;
-    esac
-done
 
 if [ "$1" = "build" ]; then
     build "$2" "$3"
@@ -85,3 +94,4 @@ fi
 echo "Error."
 echo "Command not found."
 exit 1
+
